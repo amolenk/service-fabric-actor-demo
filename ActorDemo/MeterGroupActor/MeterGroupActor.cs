@@ -1,11 +1,7 @@
 ﻿using MeterGroupActor.Interfaces;
 using Microsoft.ServiceFabric.Actors;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace MeterGroupActor
@@ -52,15 +48,9 @@ namespace MeterGroupActor
         }
 
         [Readonly]
-        Task<GroupStatus> IMeterGroupActor.GetStatusAsync()
+        Task<int> IMeterGroupActor.GetDeviceCountAsync()
         {
-            var status = new GroupStatus
-            {
-                DeviceCount = this.State.DeviceIds.Count,
-                AverageReading = -1
-            };
-
-            return Task.FromResult(status);
+            return Task.FromResult(this.State.DeviceIds.Count);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace MeterActor.Interfaces
 {
     public interface IReadingEvents : IActorEvents
     {
-        void ReadingAvailable(long deviceId, int reading);
+        void ReadingAvailable(long deviceId, int reading, Guid partitionId);
     }
 }

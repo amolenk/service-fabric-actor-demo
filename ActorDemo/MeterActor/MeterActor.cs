@@ -89,16 +89,24 @@ namespace MeterActor
 
                 this.State.LastReading = reading;
 
+                #region Events
                 this.PublishReading(reading);
+                #endregion
             }
 
             return Task.FromResult(true);
         }
 
+        #region Events
+
         private void PublishReading(int reading)
         {
             var @event = this.GetEvent<IReadingEvents>();
-            @event.ReadingAvailable(this.State.DeviceId, reading);
+
+            @event.ReadingAvailable(this.State.DeviceId, reading, 
+                this.ActorService.ServicePartition.PartitionInfo.Id);
         }
+
+        #endregion
     }
 }

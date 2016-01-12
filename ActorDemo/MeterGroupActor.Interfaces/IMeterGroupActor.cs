@@ -15,6 +15,6 @@ namespace MeterGroupActor.Interfaces
     {
         Task RegisterMeterAsync(long deviceId);
 
-        Task<GroupStatus> GetStatusAsync();
+        Task<int> GetDeviceCountAsync();
     }
 }

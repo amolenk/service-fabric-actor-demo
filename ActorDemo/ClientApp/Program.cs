@@ -34,10 +34,10 @@ namespace ClientApp
                                     RegisterDevice(long.Parse(args[1]), long.Parse(args[2]));
                                     break;
                                 }
-                            case "devicestatus":
+                            case "reading":
                                 {
                                     AssertArgCount(2, args);
-                                    GetDeviceStatus(long.Parse(args[1]));
+                                    ShowReading(long.Parse(args[1]));
                                     break;
                                 }
                             case "listen":
@@ -46,10 +46,10 @@ namespace ClientApp
                                     ListenToMeter(long.Parse(args[1]));
                                     break;
                                 }
-                            case "groupstatus":
+                            case "devicecount":
                                 {
                                     AssertArgCount(2, args);
-                                    GetGroupStatus(long.Parse(args[1]));
+                                    ShowDeviceCount(long.Parse(args[1]));
                                     break;
                                 }
                             case "exit":
@@ -79,22 +79,19 @@ namespace ClientApp
             Console.WriteLine("Ok");
         }
 
-        private static void GetDeviceStatus(long deviceId)
+        private static void ShowReading(long deviceId)
         {
             var meter = ActorProxy.Create<IMeterActor>(new ActorId(deviceId), "fabric:/ActorDemo");
             var reading = meter.GetReading().Result;
-
 
             Console.WriteLine("Last reading: {0}", reading);
         }
 
         private static void ListenToMeter(long deviceId)
         {
-            var meter = ActorProxy.Create<IMeterActor>(new ActorId(deviceId), "fabric:/ActorDemo");
-            var reading = meter.GetReading().Result;
-
             var eventHandler = new ReadingEventHandler();
 
+            var meter = ActorProxy.Create<IMeterActor>(new ActorId(deviceId), "fabric:/ActorDemo");
             meter.SubscribeAsync<IReadingEvents>(eventHandler).Wait();
 
             Console.ReadLine();
@@ -102,13 +99,12 @@ namespace ClientApp
             meter.UnsubscribeAsync<IReadingEvents>(eventHandler).Wait();
         }
 
-        private static void GetGroupStatus(long groupId)
+        private static void ShowDeviceCount(long groupId)
         {
             var meterGroup = ActorProxy.Create<IMeterGroupActor>(new ActorId(groupId), "fabric:/ActorDemo");
-            var status = meterGroup.GetStatusAsync().Result;
+            var deviceCount = meterGroup.GetDeviceCountAsync().Result;
 
-            Console.WriteLine("Device count: {0}", status.DeviceCount);
-            Console.WriteLine("Average reading: {0}", status.AverageReading);
+            Console.WriteLine("Device count: {0}", deviceCount);
         }
 
         private static void AssertArgCount(int expectedCount, string[] actualArgs)

@@ -9,9 +9,10 @@ namespace ClientApp
 {
     class ReadingEventHandler : IReadingEvents
     {
-        public void ReadingAvailable(long deviceId, int reading)
+        public void ReadingAvailable(long deviceId, int reading, Guid partitionId)
         {
-            Console.WriteLine("{2:HH:mm:ss} Reading available for device {0}: {1}", deviceId, reading, DateTime.Now);
+            Console.WriteLine("{0:HH:mm:ss} Reading available for device {1}: {2} ({3})",
+                DateTime.Now, deviceId, reading, partitionId);
         }
     }
 }
